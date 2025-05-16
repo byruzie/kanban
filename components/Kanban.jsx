@@ -1,10 +1,27 @@
+import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
+import { useState } from "react";
+
 export const KanbanCard = ({ cards }) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: "draggable",
+  });
+
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
+
   return (
     <div className="flex flex-col gap-2">
       {cards.map((card) => (
         <div
-          className="flex flex-col gap-2 border border-slate-200 rounded-lg bg-slate-50 min-h-20 w-full"
+          className={`flex flex-col gap-2 border border-slate-200 rounded-lg bg-slate-50 min-h-20 w-full`}
           key={card.id}
+          style={style}
+          {...listeners}
+          {...attributes}
+          ref={setNodeRef}
         >
           <div className="flex flex-col gap-2 p-2">
             <div>
@@ -26,6 +43,8 @@ export const KanbanCard = ({ cards }) => {
 };
 
 export const KanbanBoard = ({ statusList, cards }) => {
+  const { isOver, setNodeRef } = useDroppable({ id: "droppable" });
+
   return (
     <div className="flex gap-2">
       {statusList.map((status) => {
@@ -35,8 +54,11 @@ export const KanbanBoard = ({ statusList, cards }) => {
 
         return (
           <div
-            className="w-50 min-h-54 border border-slate-200 rounded-lg bg-slate-100 flex gap-2 justify-center p-2 pt-2"
+            className={`w-50 min-h-54 border border-slate-200 rounded-lg bg-slate-100 flex gap-2 justify-center p-2 pt-2 
+              ${isOver ? "border-b-emerald-600" : "border-amber-400"} 
+              `}
             key={status.id}
+            ref={setNodeRef}
           >
             <div className="flex flex-col gap-2 w-full">
               <div className="flex items-center space-x-2">
@@ -61,8 +83,18 @@ export const KanbanBoard = ({ statusList, cards }) => {
   );
 };
 
-export const KanbanProvider = () => {
+export const KanbanProvider = ({ statusList, cards }) => {
+  const [isDropped, setIsDropped] = useState(false);
+
+  const handleDragEnd = (event) => {
+    if (event.over && event.over.id === "droppable") {
+      setIsDropped(true);
+    }
+  };
+
   return (
-    <div>Hello World</div>
-  )
-}
+    <DndContext onDragEnd={handleDragEnd}>
+      <KanbanBoard statusList={statusList} cards={cards} />
+    </DndContext>
+  );
+};

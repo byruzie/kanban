@@ -1,4 +1,9 @@
-import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragOverlay,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
 import { useState } from "react";
 
 export const KanbanCard = ({ card }) => {
@@ -14,7 +19,7 @@ export const KanbanCard = ({ card }) => {
 
   return (
     <div
-      className={`flex flex-col gap-2 border border-slate-200 rounded-lg bg-slate-50 min-h-20 w-full`}
+      className={`flex flex-col gap-2 border border-slate-200 rounded-lg bg-slate-50 h-auto w-full`}
       key={card.id}
       style={style}
       {...listeners}
@@ -68,7 +73,13 @@ export const KanbanBoard = ({ statusList, cards }) => {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col gap-2">
+              <div
+                className={`flex flex-col gap-2 overflow-x-hidden ${
+                  filteredCards.length > 3
+                    ? "overflow-y-auto"
+                    : "overflow-y-hidden"
+                } `}
+              >
                 {filteredCards.map((card) => (
                   <KanbanCard key={card.id} card={card} />
                 ))}
@@ -83,6 +94,7 @@ export const KanbanBoard = ({ statusList, cards }) => {
 
 export const KanbanProvider = ({ statusList, cards: initialCards }) => {
   const [cards, setCards] = useState(initialCards);
+  const [activeCard, setActiveCard] = useState(null);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -102,11 +114,28 @@ export const KanbanProvider = ({ statusList, cards: initialCards }) => {
           : card
       )
     );
+    setActiveCard(null);
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext
+      onDragStart={({ active }) => {
+        const cardId = parseInt(active.id);
+        const foundCard = cards.find((c) => c.id === cardId);
+        setActiveCard(foundCard);
+      }}
+      onDragEnd={handleDragEnd}
+      onDragCancel={() => setActiveCard(null)}
+    >
       <KanbanBoard statusList={statusList} cards={cards} />
+
+      <DragOverlay>
+        {activeCard ? (
+          <div className="z-50 pointer-events-none">
+            <KanbanCard card={activeCard} />
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 };

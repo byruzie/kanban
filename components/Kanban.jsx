@@ -56,12 +56,12 @@ export const KanbanBoard = ({ statusList, cards }) => {
         return (
           <div
             className={
-              "w-50 min-h-76 max-h-76 border border-slate-200 rounded-lg bg-slate-100 flex gap-2 justify-center p-2 pt-2"
+              "w-50 min-h-76 max-h-76 border border-slate-200 rounded-lg bg-slate-100 flex gap-2 justify-center"
             }
             key={status.id}
             ref={setNodeRef}
           >
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex flex-col gap-2 w-full py-2 pl-2 pr-1">
               <div className="flex items-center space-x-2">
                 <div
                   className="h-2 w-2 rounded-full"
@@ -76,8 +76,8 @@ export const KanbanBoard = ({ statusList, cards }) => {
               <div
                 className={`flex flex-col gap-2 overflow-x-hidden ${
                   filteredCards.length > 3
-                    ? "overflow-y-auto"
-                    : "overflow-y-hidden"
+                    ? "pr-1 overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full"
+                    : "overflow-y-hidden pr-1"
                 } `}
               >
                 {filteredCards.map((card) => (

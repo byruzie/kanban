@@ -4,7 +4,7 @@ import {
   useDraggable,
   useDroppable,
 } from "@dnd-kit/core";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const KanbanCard = ({ card }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -26,13 +26,13 @@ export const KanbanCard = ({ card }) => {
       {...attributes}
       ref={setNodeRef}
     >
-      <div className="flex flex-col gap-2 p-2">
+      <div className="flex flex-col gap-2 px-2 py-[10px]">
         <div>
-          <p className="font-semibold text-sm text-slate-800">{card.name}</p>
+          <p className="font-semibold text-slate-800">{card.name}</p>
         </div>
         <div>
-          <p className="text-xs text-slate-600">{card.description}</p>
-          <p className="text-xs text-slate-600">
+          <p className="text-sm text-slate-600">{card.description}</p>
+          <p className="text-sm text-slate-600">
             {card.startAt} - {card.endAt}
           </p>
         </div>
@@ -56,7 +56,7 @@ export const KanbanBoard = ({ statusList, cards }) => {
         return (
           <div
             className={
-              "w-50 min-h-76 max-h-76 border border-slate-200 rounded-lg bg-slate-100 flex gap-2 justify-center"
+              "w-60 min-h-80 max-h-76 border border-slate-200 rounded-lg bg-slate-100 flex gap-2 justify-center"
             }
             key={status.id}
             ref={setNodeRef}
@@ -68,9 +68,7 @@ export const KanbanBoard = ({ statusList, cards }) => {
                   style={{ backgroundColor: status.color }}
                 />
                 <div>
-                  <p className="font-semibold text-sm text-slate-800">
-                    {status.name}
-                  </p>
+                  <p className="font-semibold text-slate-800">{status.name}</p>
                 </div>
               </div>
               <div
@@ -92,42 +90,150 @@ export const KanbanBoard = ({ statusList, cards }) => {
   );
 };
 
-export const Header = ({ name }) => {
-  const [open, setOpen] = useState(false);
-
+export const Header = ({ name, newClick }) => {
   return (
     <div className="w-full flex justify-between">
       <h1 className="text-xl font-semibold text-slate-800">{name}</h1>
       <button
-        className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer text-sm font-semibold text-slate-800"
-        onClick={() => setOpen(true)}
+        className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer font-semibold text-slate-800"
+        onClick={newClick}
       >
         New
       </button>
-
-      <Modal open={open} onClose={() => setOpen(false)}></Modal>
     </div>
   );
 };
 
-export const Modal = ({ open, onClose }) => {
+export const Modal = ({ open, onClose, statusList }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [startAt, setStartAt] = useState("");
+  const [endAt, setEndAt] = useState("");
+
+  // Função para formatar a data no formato DD/MM
+  const handleInputChange = (e, setDate) => {
+    const value = e.target.value.replace(/\D/g, ""); // Remove qualquer coisa que não seja número
+
+    // Adiciona a barra ("/") após o dia (2 caracteres) e o mês (4 caracteres)
+    let formattedValue = value;
+    if (formattedValue.length > 2) {
+      formattedValue =
+        formattedValue.slice(0, 2) + "/" + formattedValue.slice(2, 4);
+    }
+
+    if (formattedValue.length <= 5) {
+      setDate(formattedValue);
+    }
+  };
+
+  const selectRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div
-      onClick={onClose}
       className={`fixed inset-0 flex justify-center items-center
       ${open ? "visible bg-slate-800/40" : "invisible"}
     `}
     >
-      <div className="flex flex-col justify-center items-center w-[300px] h-[200px] bg-slate-50 border border-slate-100 rounded-lg p-2">
-        <div className="border border-amber-300 w-full h-full">
+      <div className="flex flex-col justify-center items-center w-80 bg-slate-50 border border-slate-100 rounded-lg p-4">
+        <div className="w-full h-full flex flex-col gap-4">
+          <div>
+            <form action="" className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="">Name</label>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  className="border border-slate-200 p-2 rounded-sm focus:outline-none focus:border-slate-300"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="">Description</label>
+                <input
+                  type="text"
+                  placeholder="Description"
+                  className="border border-slate-200 p-2 rounded-sm focus:outline-none focus:border-slate-300"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="">Status</label>
+                <div ref={selectRef} className="relative">
+                  <div
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="border border-slate-200 px-2 py-2 rounded-sm cursor-pointer text-gray-500"
+                  >
+                    {selected ? selected.name : "Select status"}
+                  </div>
+                  {isOpen && (
+                    <ul className="absolute z-10 w-full bg-slate-50 border border-slate-200 mt-1 rounded-sm shadow">
+                      {statusList.map((status) => (
+                        <li
+                          key={status.id}
+                          onClick={() => {
+                            setSelected(status);
+                            setIsOpen(false);
+                          }}
+                          className="px-3 py-2 hover:bg-slate-100 cursor-pointer flex items-center gap-2"
+                        >
+                          <span
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: status.color }}
+                          />
+                          {status.name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div className="flex items-center gap-1">
+                  <label htmlFor="">Start At</label>
+                  <input
+                    type="text"
+                    id="start_at"
+                    name="start_at"
+                    value={startAt}
+                    onChange={(e) => handleInputChange(e, setStartAt)}
+                    maxLength="5"
+                    placeholder="DD/MM"
+                    className="w-[65px] p-2 border border-slate-200 rounded-sm focus:outline-none"
+                  />
+                </div>
+                <div className="flex items-center gap-1">
+                  <label htmlFor="">End At</label>
+                  <input
+                    type="text"
+                    id="end_at"
+                    name="end_at"
+                    value={endAt}
+                    onChange={(e) => handleInputChange(e, setEndAt)}
+                    maxLength="5"
+                    placeholder="DD/MM"
+                    className="w-[65px] p-2 border border-slate-200 rounded-sm focus:outline-none"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
           <div className="w-full h-full flex justify-between items-end">
             <button
-              onClick={() => setOpen(false)}
-              className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer text-sm font-semibold text-slate-800"
+              onClick={onClose}
+              className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer font-semibold text-slate-800"
             >
               Cancel
             </button>
-            <button className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer text-sm font-semibold text-slate-800">
+            <button className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer font-semibold text-slate-800">
               Submit
             </button>
           </div>

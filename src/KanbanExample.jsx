@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Header, KanbanProvider, Modal } from "../components/Kanban";
 
 const statusList = [
@@ -42,10 +43,13 @@ const cardsList = [
 ];
 
 function KanbanExample() {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="h-screen w-screen flex justify-center items-center">
       <div className="flex flex-col gap-4">
-        <Header name={"Tasks"}/>
+        <Header name={"Tasks"} newClick={() => setOpen(true)}/>
+        <Modal open={open} onClose={() => setOpen(false)} statusList={statusList}></Modal>
         <KanbanProvider statusList={statusList} cards={cardsList} />
       </div>
     </div>

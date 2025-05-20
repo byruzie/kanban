@@ -1,4 +1,4 @@
-import { KanbanBoard, KanbanProvider } from "../components/Kanban";
+import { Header, KanbanProvider, Modal } from "../components/Kanban";
 
 const statusList = [
   { id: "1", name: "Pending", color: "#6B7280" },
@@ -38,13 +38,16 @@ const cardsList = [
     status: statusList[1],
     startAt: "May 14",
     endAt: "May 15",
-  }
+  },
 ];
 
 function KanbanExample() {
   return (
-    <div className="h-screen flex justify-center items-center">
-      <KanbanProvider statusList={statusList} cards={cardsList} />
+    <div className="h-screen w-screen flex justify-center items-center">
+      <div className="flex flex-col gap-4">
+        <Header name={"Tasks"}/>
+        <KanbanProvider statusList={statusList} cards={cardsList} />
+      </div>
     </div>
   );
 }

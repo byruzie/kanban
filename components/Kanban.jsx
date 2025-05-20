@@ -92,34 +92,89 @@ export const KanbanBoard = ({ statusList, cards }) => {
   );
 };
 
+export const Header = ({ name }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="w-full flex justify-between">
+      <h1 className="text-xl font-semibold text-slate-800">{name}</h1>
+      <button
+        className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer text-sm font-semibold text-slate-800"
+        onClick={() => setOpen(true)}
+      >
+        New
+      </button>
+
+      <Modal open={open} onClose={() => setOpen(false)}></Modal>
+    </div>
+  );
+};
+
+export const Modal = ({ open, onClose }) => {
+  return (
+    <div
+      onClick={onClose}
+      className={`fixed inset-0 flex justify-center items-center
+      ${open ? "visible bg-slate-800/40" : "invisible"}
+    `}
+    >
+      <div className="flex flex-col justify-center items-center w-[300px] h-[200px] bg-slate-50 border border-slate-100 rounded-lg p-2">
+        <div className="border border-amber-300 w-full h-full">
+          <div className="w-full h-full flex justify-between items-end">
+            <button
+              onClick={() => setOpen(false)}
+              className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer text-sm font-semibold text-slate-800"
+            >
+              Cancel
+            </button>
+            <button className="border border-slate-200 rounded-sm bg-slate-100 py-1 px-6 cursor-pointer text-sm font-semibold text-slate-800">
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const KanbanProvider = ({ statusList, cards: initialCards }) => {
   const [cards, setCards] = useState(initialCards);
   const [activeCard, setActiveCard] = useState(null);
 
   const handleDragEnd = (event) => {
+    // cria um evento que é chamado quando algum card é solto nas colunas de status
     const { active, over } = event;
 
     if (!over) return;
 
-    const cardId = parseInt(active.id);
-    const newStatusId = over.id;
+    const cardId = parseInt(active.id); // id do card que está sendo arrastado
+    const newStatusId = over.id; // id da coluna de status que o card foi solto
 
-    setCards((prevCards) =>
-      prevCards.map((card) =>
-        card.id === cardId
-          ? {
-              ...card,
-              status: statusList.find((status) => status.id === newStatusId),
-            }
-          : card
-      )
+    setCards(
+      (
+        prevCards // atualiza o estado dos cards arrastados, prevCards são os cards atuais
+      ) =>
+        prevCards.map(
+          (card) =>
+            card.id === cardId // compara o id de cada card atual com o id do card arrastado
+              ? {
+                  ...card, // repete os dados do card (name, description, etc)
+                  status: statusList.find(
+                    (status) => status.id === newStatusId
+                  ), // altera o id do status da nova coluna
+                }
+              : card // mantém as informações do card atual quando o id não é igual ao do card arrastado
+        )
     );
     setActiveCard(null);
   };
 
+  const [open, setOpen] = useState();
+
   return (
     <DndContext
       onDragStart={({ active }) => {
+        // seta como ativo o card que está sendo arrastado para posteriormente usar no DragOverlay
         const cardId = parseInt(active.id);
         const foundCard = cards.find((c) => c.id === cardId);
         setActiveCard(foundCard);

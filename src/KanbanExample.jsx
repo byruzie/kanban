@@ -7,7 +7,7 @@ const statusList = [
   { id: "3", name: "Completed", color: "#10B981" },
 ];
 
-const cardsList = [
+const initialCards = [
   {
     id: 1,
     name: "AI Scene Analysis",
@@ -24,36 +24,28 @@ const cardsList = [
     startAt: "May 14",
     endAt: "May 15",
   },
-  {
-    id: 3,
-    name: "Backend Scene Analysis",
-    description: "Backend Integration",
-    status: statusList[1],
-    startAt: "May 14",
-    endAt: "May 15",
-  },
-  {
-    id: 4,
-    name: "Mobile Scene Analysis",
-    description: "Mobile Integration",
-    status: statusList[1],
-    startAt: "May 14",
-    endAt: "May 15",
-  },
 ];
 
 function KanbanExample() {
   const [open, setOpen] = useState(false);
+  const [cards, setCards] = useState(initialCards);
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
       <div className="flex flex-col gap-4">
-        <Header name={"Tasks"} newClick={() => setOpen(true)}/>
-        <Modal open={open} onClose={() => setOpen(false)} statusList={statusList}></Modal>
-        <KanbanProvider statusList={statusList} cards={cardsList} />
+        <Header name={"Tasks"} newClick={() => setOpen(true)} />
+        <Modal
+          open={open}
+          onClose={() => setOpen(false)}
+          statusList={statusList}
+          setCards={setCards}
+          cards={cards}
+        />
+        <KanbanProvider statusList={statusList} cards={cards} setCards={setCards} />
       </div>
     </div>
   );
 }
 
 export default KanbanExample;
+

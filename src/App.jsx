@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { KanbanProvider } from "./components/KanbanProvider";
-import { Header } from "./components/KanbanTitle";
+import { KanbanHeader } from "./components/KanbanHeader";
 
 const statusList = [
   { id: "1", name: "Pending", color: "#6B7280" },
@@ -35,7 +35,7 @@ export default function App() {
     <div className="h-screen flex justify-center items-center">
       <div className="bg-slate-500 w-[800px] h-[400px] flex justify-center items-center rounded-2xl">
         <div className="flex flex-col gap-4">
-          <Header
+          <KanbanHeader
             open={open}
             setOpen={setOpen}
             onClose={() => setOpen(false)}

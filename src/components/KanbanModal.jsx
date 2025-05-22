@@ -56,17 +56,36 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
   const formSubmit = (e) => {
     e.preventDefault();
 
-    const newCard = {
+    const formatDate = (dateStr) => { // formata a data 
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      const day = dateStr.slice(0, 2);
+      const month = months[parseInt(dateStr.slice(3, 5), 10) - 1];
+      return `${month} ${day}`;
+    };
+
+    const newCard = { // cria uma nova tarefa com os dados do formulário
       id: cards.length + 1,
       name,
       description,
       status: selected,
-      startAt,
-      endAt,
+      startAt: formatDate(startAt),
+      endAt: formatDate(endAt),
     };
 
     setCards([...cards, newCard]);
-
     resetForm();
     onClose();
   };

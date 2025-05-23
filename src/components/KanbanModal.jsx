@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 
 // modal com o formulário para criação de nova tarefa
-export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
+export const Modal = ({
+  open,
+  onClose,
+  statusList,
+  setCards,
+  cards,
+  cardToEdit,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(cardToEdit?.status || null);
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [startAt, setStartAt] = useState("");
-  const [endAt, setEndAt] = useState("");
+  const [name, setName] = useState(cardToEdit?.name || "");
+  const [description, setDescription] = useState(cardToEdit?.name || "");
+  const [startAt, setStartAt] = useState(cardToEdit?.name || "");
+  const [endAt, setEndAt] = useState(cardToEdit?.name || "");
 
   const selectRef = useRef(null);
 
@@ -24,6 +31,17 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
       setDate(formattedValue);
     }
   };
+
+  // atualiza os campos se cardToEdit mudar
+  useEffect(() => {
+    if (cardToEdit && open) {
+      setName(cardToEdit.name || "");
+      setDescription(cardToEdit.description || "");
+      setStartAt(cardToEdit.startAt || "");
+      setEndAt(cardToEdit.endAt || "");
+      setSelected(cardToEdit.status || null);
+    }
+  }, [cardToEdit, open]);
 
   // fecha a lista de opções de status ao clicar fora das opções
   useEffect(() => {
@@ -77,17 +95,35 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
       return `${month} ${day}`;
     };
 
-    const newCard = {
-      // cria uma nova tarefa com os dados do formulário
-      id: cards.length + 1,
-      name,
-      description,
-      status: selected,
-      startAt: formatDate(startAt),
-      endAt: formatDate(endAt),
-    };
+    if (cardToEdit) {
+      // Modo edição
+      setCards((prev) =>
+        prev.map((c) =>
+          c.id === cardToEdit.id
+            ? {
+                ...c,
+                name,
+                description,
+                startAt: formatDate(startAt),
+                endAt: formatDate(endAt),
+                status: selected,
+              }
+            : c
+        )
+      );
+    } else {
+      const newCard = {
+        // cria uma nova tarefa com os dados do formulário
+        id: cards.length + 1,
+        name,
+        description,
+        status: selected,
+        startAt: formatDate(startAt),
+        endAt: formatDate(endAt),
+      };
+      setCards([...cards, newCard]);
+    }
 
-    setCards([...cards, newCard]);
     resetForm();
     onClose();
   };
@@ -110,10 +146,12 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
             </span>
             <div className="flex flex-col gap-1">
               <h1 className="font-bold text-[18px] text-neutral-800">
-                Create a new task
+                {cardToEdit ? "Edit your task" : "Create a new task"}
               </h1>
               <h2 className="font-light text-base text-neutral-600">
-                Provide task information to add it to your workflow.
+                {cardToEdit
+                  ? "Update the task information and save your changes."
+                  : "Provide task information to add it to your workflow."}
               </h2>
             </div>
           </div>
@@ -220,7 +258,7 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
                 type="submit"
                 className="rounded-sm bg-neutral-800 py-2 px-4 font-medium text-neutral-50 cursor-pointer"
               >
-                Submit
+                {cardToEdit ? "Save" : "Submit"}
               </button>
             </div>
           </form>

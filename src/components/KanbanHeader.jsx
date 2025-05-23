@@ -1,6 +1,13 @@
 import { Modal } from "./KanbanModal";
 
-export const KanbanHeader = ({ open, setOpen, onClose, statusList, setCards, cards }) => {
+export const KanbanHeader = ({
+  open,
+  setOpen,
+  onClose,
+  statusList,
+  setCards,
+  cards,
+}) => {
   return (
     <div className="w-full">
       <div className="flex justify-between">

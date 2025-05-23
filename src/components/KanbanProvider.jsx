@@ -1,11 +1,25 @@
 import { useState } from "react";
 import { KanbanBoard } from "./KanbanBoard";
-import { DndContext, DragOverlay } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { KanbanCard } from "./KanbanCard";
+import { Modal } from "./KanbanModal";
 
 // ativa a funcionalidade de dropped/draggable e renderiza o componente kanbanBoard
 export const KanbanProvider = ({ statusList, cards, setCards }) => {
   const [activeCard, setActiveCard] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [cardToEdit, setCardToEdit] = useState(null);
+
+  const handleEditCard = (card) => {
+    setCardToEdit(card);
+    setEditModalOpen(true);
+  };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -27,8 +41,18 @@ export const KanbanProvider = ({ statusList, cards, setCards }) => {
     setActiveCard(null);
   };
 
+  // solução para double click bug
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  });
+
+  const sensors = useSensors(pointerSensor);
+
   return (
     <DndContext
+      sensors={sensors}
       onDragStart={({ active }) => {
         const cardId = parseInt(active.id);
         const foundCard = cards.find((c) => c.id === cardId);
@@ -37,7 +61,20 @@ export const KanbanProvider = ({ statusList, cards, setCards }) => {
       onDragEnd={handleDragEnd}
       onDragCancel={() => setActiveCard(null)}
     >
-      <KanbanBoard statusList={statusList} cards={cards} />
+      <KanbanBoard
+        statusList={statusList}
+        cards={cards}
+        onEdit={handleEditCard}
+      />
+
+      <Modal
+        open={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        statusList={statusList}
+        setCards={setCards}
+        cards={cards}
+        cardToEdit={cardToEdit}
+      />
 
       <DragOverlay>
         {activeCard ? (

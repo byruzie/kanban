@@ -2,7 +2,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { KanbanCards } from "./KanbanCards";
 
 // estilo do board de cards e funcionalidade de droppable, recebe uma lista de status e cards
-export const KanbanBoard = ({ statusList, cards }) => {
+export const KanbanBoard = ({ statusList, cards, onEdit }) => {
   return (
     <div className="flex gap-2">
       {statusList.map((status) => {
@@ -39,7 +39,7 @@ export const KanbanBoard = ({ statusList, cards }) => {
                     : "overflow-y-hidden pr-1"
                 } `}
               >
-                <KanbanCards cards={filteredCards} />
+                <KanbanCards cards={filteredCards} onEdit={onEdit} />
               </div>
             </div>
           </div>

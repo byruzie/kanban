@@ -108,12 +108,14 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
             >
               close
             </span>
-            <h1 className="font-semibold text-xl text-neutral-800">
-              Create a new task
-            </h1>
-            <h2 className="font-light text-neutral-600">
-              Provide task information to add it to your workflow.
-            </h2>
+            <div className="flex flex-col gap-1">
+              <h1 className="font-bold text-[18px] text-neutral-800">
+                Create a new task
+              </h1>
+              <h2 className="font-light text-base text-neutral-600">
+                Provide task information to add it to your workflow.
+              </h2>
+            </div>
           </div>
 
           <form onSubmit={formSubmit} className="flex flex-col gap-6 w-full">
@@ -171,9 +173,7 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
                 </div>
 
                 <div className="w-[50%] flex flex-col gap-2">
-                  <label className="font-medium text-neutral-800">
-                    Status
-                  </label>
+                  <label className="font-medium text-neutral-800">Status</label>
                   <div ref={selectRef} className="relative">
                     <div
                       onClick={() => setIsOpen(!isOpen)}

@@ -12,6 +12,8 @@ export const KanbanCard = ({ card }) => {
       }
     : undefined;
 
+  
+
   return (
     <div
       className={`flex flex-col gap-2 border border-neutral-200 rounded-lg bg-neutral-50 h-auto w-full cursor-pointer`}

@@ -17,7 +17,7 @@ export const KanbanBoard = ({ statusList, cards }) => {
         return (
           <div
             className={
-              "w-60 min-h-80 max-h-76 border border-slate-200 rounded-lg bg-slate-100 flex gap-2 justify-center"
+              "w-60 min-h-80 max-h-76 border border-neutral-200 rounded-lg bg-neutral-100 flex gap-2 justify-center"
             }
             key={status.id}
             ref={setNodeRef}
@@ -29,13 +29,13 @@ export const KanbanBoard = ({ statusList, cards }) => {
                   style={{ backgroundColor: status.color }}
                 />
                 <div>
-                  <p className="font-semibold text-slate-800">{status.name}</p>
+                  <p className="font-semibold text-neutral-800">{status.name}</p>
                 </div>
               </div>
               <div
                 className={`flex flex-col gap-2 overflow-x-hidden ${
                   filteredCards.length > 3
-                    ? "pr-1 overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full"
+                    ? "pr-1 overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-neutral-300 [&::-webkit-scrollbar-thumb]:rounded-full"
                     : "overflow-y-hidden pr-1"
                 } `}
               >

@@ -56,7 +56,8 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
   const formSubmit = (e) => {
     e.preventDefault();
 
-    const formatDate = (dateStr) => { // formata a data 
+    const formatDate = (dateStr) => {
+      // formata a data
       const months = [
         "Jan",
         "Feb",
@@ -76,7 +77,8 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
       return `${month} ${day}`;
     };
 
-    const newCard = { // cria uma nova tarefa com os dados do formulário
+    const newCard = {
+      // cria uma nova tarefa com os dados do formulário
       id: cards.length + 1,
       name,
       description,
@@ -93,34 +95,42 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center ${
-        open ? "visible bg-slate-800/50" : "invisible"
+        open ? "visible bg-neutral-800/50" : "invisible"
       }`}
     >
-      <div className="flex flex-col justify-center items-center w-110 bg-slate-50 border border-gray-100 rounded-lg p-6">
+      <div className="flex flex-col justify-center items-center w-120 bg-neutral-50 shadow-xl rounded-lg p-8">
         <div className="w-full flex flex-col gap-6">
-          <div className="flex flex-col gap-1">
-            <h1 className="font-semibold text-xl text-slate-800">
+          <div>
+            <span
+              onClick={handleClose}
+              style={{ fontSize: "18px" }}
+              className="material-icons-outlined absolute top-87 right-220 cursor-pointer text-neutral-400 hover:text-neutral-800"
+            >
+              close
+            </span>
+            <h1 className="font-semibold text-xl text-neutral-800">
               Create a new task
             </h1>
-            <p className="text-gray-400">
+            <h2 className="font-light text-neutral-600">
               Provide task information to add it to your workflow.
-            </p>
+            </h2>
           </div>
+
           <form onSubmit={formSubmit} className="flex flex-col gap-6 w-full">
             <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="font-semibold text-slate-800">Name</label>
+              <div className="flex flex-col gap-2">
+                <label className="font-medium text-neutral-800">Name</label>
                 <input
                   name="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Name"
-                  className="border border-slate-200 p-2 rounded-sm focus:outline-none"
+                  className="border border-neutral-200 p-2 rounded-sm text-neutral-800 font-light focus:outline-none"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="font-semibold text-slate-800">
+              <div className="flex flex-col gap-2">
+                <label className="font-medium text-neutral-800">
                   Description
                 </label>
                 <input
@@ -129,15 +139,15 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Description"
-                  className="border border-slate-200 p-2 rounded-sm focus:outline-none"
+                  className="border border-neutral-200 p-2 rounded-sm text-neutral-800 font-light focus:outline-none"
                 />
               </div>
               <div className="flex gap-4">
-                <div className="flex flex-col w-[50%] gap-1">
-                  <label className="font-semibold text-slate-800">
+                <div className="flex flex-col w-[50%] gap-2">
+                  <label className="font-medium text-neutral-800">
                     Date Range
                   </label>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-[10px] font-medium">
                     <input
                       type="text"
                       name="startAt"
@@ -145,7 +155,7 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
                       onChange={(e) => handleInputChange(e, setStartAt)}
                       maxLength="5"
                       placeholder="DD/MM"
-                      className="w-[65px] p-2 border border-slate-200 rounded-sm focus:outline-none"
+                      className="w-[68px] p-2 border border-neutral-200 rounded-sm text-neutral-700 font-light focus:outline-none"
                     />
                     -
                     <input
@@ -155,24 +165,26 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
                       onChange={(e) => handleInputChange(e, setEndAt)}
                       maxLength="5"
                       placeholder="DD/MM"
-                      className="w-[65px] p-2 border border-slate-200 rounded-sm focus:outline-none"
+                      className="w-[68px] p-2 border border-neutral-200 rounded-sm text-neutral-700 font-light focus:outline-none"
                     />
                   </div>
                 </div>
 
-                <div className="w-[50%] flex flex-col gap-1">
-                  <label className="font-semibold text-slate-800">Status</label>
+                <div className="w-[50%] flex flex-col gap-2">
+                  <label className="font-medium text-neutral-800">
+                    Status
+                  </label>
                   <div ref={selectRef} className="relative">
                     <div
                       onClick={() => setIsOpen(!isOpen)}
-                      className={`border border-slate-200 px-2 py-2 rounded-sm cursor-pointer ${
-                        selected ? "text-slate-800" : "text-gray-500"
+                      className={`border border-neutral-200 px-2 py-2 rounded-sm cursor-pointer font-light ${
+                        selected ? "text-neutral-800" : "text-neutral-400"
                       }`}
                     >
                       {selected ? selected.name : "Select status"}
                     </div>
                     {isOpen && (
-                      <ul className="absolute z-10 w-full bg-slate-50 border border-slate-200 mt-1 rounded-sm shadow">
+                      <ul className="absolute z-10 w-full bg-neutral-50 border border-neutral-200 mt-1 rounded-sm shadow">
                         {statusList.map((status) => (
                           <li
                             key={status.id}
@@ -180,7 +192,7 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
                               setSelected(status);
                               setIsOpen(false);
                             }}
-                            className="px-3 py-2 hover:bg-slate-100 cursor-pointer flex items-center gap-2"
+                            className="px-3 py-2 hover:bg-neutral-100 cursor-pointer flex items-center gap-2"
                           >
                             <span
                               className="w-2 h-2 rounded-full"
@@ -200,13 +212,13 @@ export const Modal = ({ open, onClose, statusList, setCards, cards }) => {
               <button
                 type="button"
                 onClick={handleClose}
-                className="border border-slate-200 rounded-sm bg-slate-100 py-2 px-4 font-semibold text-slate-800 cursor-pointer"
+                className="rounded-sm bg-neutral-800 py-2 px-4 font-medium text-neutral-50 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="border border-slate-200 rounded-sm bg-slate-100 py-2 px-4 font-semibold text-slate-800 cursor-pointer"
+                className="rounded-sm bg-neutral-800 py-2 px-4 font-medium text-neutral-50 cursor-pointer"
               >
                 Submit
               </button>

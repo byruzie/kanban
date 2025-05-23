@@ -33,7 +33,7 @@ export default function App() {
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <div className="bg-slate-500 w-[800px] h-[400px] flex justify-center items-center rounded-2xl">
+      <div className="flex justify-center items-center rounded-2xl">
         <div className="flex flex-col gap-4">
           <KanbanHeader
             open={open}

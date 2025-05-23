@@ -14,7 +14,7 @@ export const KanbanCard = ({ card }) => {
 
   return (
     <div
-      className={`flex flex-col gap-2 border border-slate-200 rounded-lg bg-slate-50 h-auto w-full`}
+      className={`flex flex-col gap-2 border border-neutral-200 rounded-lg bg-neutral-50 h-auto w-full cursor-pointer`}
       key={card.id}
       style={style}
       {...listeners}
@@ -23,11 +23,11 @@ export const KanbanCard = ({ card }) => {
     >
       <div className="flex flex-col gap-2 px-2 py-[10px]">
         <div>
-          <p className="font-semibold text-slate-800">{card.name}</p>
+          <p className="font-semibold text-neutral-800">{card.name}</p>
         </div>
         <div>
-          <p className="text-sm text-slate-600">{card.description}</p>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-neutral-600">{card.description}</p>
+          <p className="text-sm text-neutral-600">
             {card.startAt} - {card.endAt}
           </p>
         </div>

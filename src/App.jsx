@@ -9,7 +9,7 @@ const statusList = [
   { id: "3", name: "Completed", color: "#10B981" },
 ];
 
-const initialCards = [
+const defaultCards = [
   {
     id: 1,
     name: "AI Scene Analysis",

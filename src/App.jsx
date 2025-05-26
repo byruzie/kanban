@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { KanbanProvider } from "./components/KanbanProvider";
 import { KanbanHeader } from "./components/Header";
+import { TimeCounter } from "./components/TimeCounter";
 
 const statusList = [
   { id: "1", name: "Pending", color: "#6B7280" },
@@ -16,7 +17,7 @@ const initialCards = [
     status: statusList[2],
     startAt: "May 14",
     endAt: "May 15",
-    timeUsed: "00:00",
+    timeUsed: "04:00",
   },
   {
     id: 2,
@@ -50,6 +51,7 @@ export default function App() {
             cards={cards}
             setCards={setCards}
           />
+          <TimeCounter cards={cards} statusName={'Completed'}/>
         </div>
       </div>
     </div>

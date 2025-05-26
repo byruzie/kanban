@@ -33,11 +33,13 @@ Acesse o projeto online:
 
 ## 🧠 Aprendizados
 
-- Estado global com React (lifting state up)
-- Integração de drag-and-drop com @dnd-kit
-- Persistência com `localStorage`
-- Deploy de SPA com Vite no GitHub Pages
-- Manipulação de datas, formatação e controle de formulário
+- Componentização: O projeto é dividido em componentes reutilizáveis (`KanbanCard`, `KanbanBoard`, etc), seguindo boas práticas de arquitetura React.
+- Estado global com React: controlar o estado com `useState` e a compartilhá-lo entre componentes através do "lifting state up".
+- Hooks: uso do `useState` para controlar dados e inputs e do `useEffect` para sincronizar o estado com o `localStorage` e reagir a mudanças.
+- Integração com bibliotecas externas: Uso do `@dnd-kit/core` para implementar drag-and-drop com React. Personalização de sensores e overlays para uma UX fluida.
+- Persistência com `localStorage`: salvar os dados localmente para manter o estado mesmo após atualizar a página.
+- Deploy de SPA com Vite no GitHub Pages.
+- Manipulação de datas, formatação e controle de formulário: Como capturar inputs, formatar valores e validar campos em tempo real com estados controlados.
 
 ---
 

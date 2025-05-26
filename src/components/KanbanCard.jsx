@@ -33,7 +33,7 @@ export const KanbanCard = ({ card, onEdit }) => {
         <div>
           <p className="text-sm text-neutral-600">{card.description}</p>
           <p className="text-sm text-neutral-600">
-            {card.startAt} - {card.endAt} [{card.timeUsed}]
+            {card.startAt} - {card.endAt}, {card.timeUsed}
           </p>
         </div>
       </div>

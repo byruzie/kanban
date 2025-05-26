@@ -75,8 +75,6 @@ export const Modal = ({
   // atualiza os campos se cardToEdit mudar
   useEffect(() => {
     if (cardToEdit && open) {
-      console.log("📝 cardToEdit recebido:", cardToEdit);
-
       setName(cardToEdit.name || "");
       setDescription(cardToEdit.description || "");
       setStartAt(parseDate(cardToEdit.startAt));
@@ -86,7 +84,6 @@ export const Modal = ({
     }
 
     if (!cardToEdit && open) {
-      console.log("🆕 Modo criação - nenhum card para editar");
       resetForm();
     }
   }, [cardToEdit, open]);
@@ -118,22 +115,22 @@ export const Modal = ({
       return `${formattedMonth} ${formattedDay}`;
     };
 
+    let updatedCards;
+
     if (cardToEdit) {
       // Modo edição
-      setCards((prev) =>
-        prev.map((c) =>
-          c.id === cardToEdit.id
-            ? {
-                ...c,
-                name,
-                description,
-                status,
-                timeUsed,
-                startAt: formatDate(startAt),
-                endAt: formatDate(endAt),
-              }
-            : c
-        )
+      updatedCards = cards.map((c) =>
+        c.id === cardToEdit.id
+          ? {
+              ...c,
+              name,
+              description,
+              status,
+              timeUsed,
+              startAt: formatDate(startAt),
+              endAt: formatDate(endAt),
+            }
+          : c
       );
     } else {
       const newCard = {
@@ -146,8 +143,10 @@ export const Modal = ({
         startAt: formatDate(startAt),
         endAt: formatDate(endAt),
       };
-      setCards([...cards, newCard]);
+      updatedCards = [...cards, newCard];
     }
+
+    setCards(updatedCards);
 
     resetForm();
     onClose();

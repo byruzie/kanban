@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KanbanProvider } from "./components/KanbanProvider";
 import { KanbanHeader } from "./components/Header";
 import { TimeCounter } from "./components/TimeCounter";
@@ -32,7 +32,28 @@ const initialCards = [
 
 export default function App() {
   const [open, setOpen] = useState(false);
-  const [cards, setCards] = useState(initialCards);
+  const [cards, setCards] = useState(() => {
+    const saved = localStorage.getItem("kanban-cards");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+
+        // Restaura os objetos de status corretamente
+        return parsed.map((card) => ({
+          ...card,
+          status: statusList.find((s) => s.id === card.status.id),
+        }));
+      } catch {
+        return defaultCards;
+      }
+    }
+    return defaultCards;
+  });
+
+  // Salva no localStorage toda vez que os cards mudarem
+  useEffect(() => {
+    localStorage.setItem("kanban-cards", JSON.stringify(cards));
+  }, [cards]);
 
   return (
     <div className="h-screen flex justify-center items-center">
@@ -51,7 +72,7 @@ export default function App() {
             cards={cards}
             setCards={setCards}
           />
-          <TimeCounter cards={cards} statusName={'Completed'}/>
+          <TimeCounter cards={cards} statusName={"Completed"} />
         </div>
       </div>
     </div>

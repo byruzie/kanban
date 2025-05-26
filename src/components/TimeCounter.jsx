@@ -12,15 +12,25 @@ export const TimeCounter = ({ cards, statusName }) => {
     const totalHours = Math.floor(totalMinutes / 60);
     const remainingMinutes = totalMinutes % 60;
 
-    return `${String(totalHours).padStart(2, "0")}:${String(
-      remainingMinutes
-    ).padStart(2, "0")}`;
+    if (totalMinutes === 0) return "0h";
+
+    if (remainingMinutes === 0) {
+      return `${totalHours}h`;
+    } else {
+      return `${totalHours}h${remainingMinutes}`;
+    }
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold text-neutral-800">Time Used: {sumTimeUsedByStatus()}</h1>
-      <h2></h2>
+    <div className="border border-neutral-800 rounded-sm w-[128px] h-[34px] flex items-center">
+      <div className="flex justify-center items-center w-[48%] h-full">
+        <h1 className="font-medium flex justify-center items-center w-full h-full bg-neutral-800 text-neutral-50">Time</h1>
+      </div>
+      <div className="flex justify-center items-center w-[52%] h-full">
+        <h2>
+          {sumTimeUsedByStatus()}
+        </h2>
+      </div>
     </div>
   );
 };

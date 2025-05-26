@@ -1,9 +1,8 @@
-import { Modal } from "./KanbanModal";
+import { Modal } from "./Modal";
 
 export const KanbanHeader = ({
   open,
   setOpen,
-  onClose,
   statusList,
   setCards,
   cards,
@@ -22,7 +21,9 @@ export const KanbanHeader = ({
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        statusList={statusList}
+        list={statusList}
+        title={"Create a new task"}
+        subtitle={"Provide task information to add it to your workflow."}
         setCards={setCards}
         cards={cards}
       />

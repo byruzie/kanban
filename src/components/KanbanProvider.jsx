@@ -8,7 +8,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { KanbanCard } from "./KanbanCard";
-import { Modal } from "./KanbanModal";
+import { Modal } from "./Modal";
 
 // ativa a funcionalidade de dropped/draggable e renderiza o componente kanbanBoard
 export const KanbanProvider = ({ statusList, cards, setCards }) => {
@@ -70,7 +70,9 @@ export const KanbanProvider = ({ statusList, cards, setCards }) => {
       <Modal
         open={editModalOpen}
         onClose={() => setEditModalOpen(false)}
-        statusList={statusList}
+        list={statusList}
+        title={"Edit your task"}
+        subtitle={"Update the task information and save your changes."}
         setCards={setCards}
         cards={cards}
         cardToEdit={cardToEdit}

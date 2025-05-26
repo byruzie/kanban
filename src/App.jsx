@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { KanbanProvider } from "./components/KanbanProvider";
-import { KanbanHeader } from "./components/KanbanHeader";
+import { KanbanHeader } from "./components/Header";
 
 const statusList = [
   { id: "1", name: "Pending", color: "#6B7280" },
@@ -16,6 +16,7 @@ const initialCards = [
     status: statusList[2],
     startAt: "May 14",
     endAt: "May 15",
+    timeUsed: "00:00",
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ const initialCards = [
     status: statusList[0],
     startAt: "May 14",
     endAt: "May 15",
+    timeUsed: "00:00",
   },
 ];
 
